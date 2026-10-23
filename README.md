@@ -1,6 +1,8 @@
 ### Desk Theme
 
-Theme for Frappe desk, login and website: palette, accent and shell colours from one settings page.
+Desk, login and website theme from one settings page.
+
+How it works, how to change colours, and what to re-check after `bench update`: [THEME.md](THEME.md).
 
 ### Installation
 

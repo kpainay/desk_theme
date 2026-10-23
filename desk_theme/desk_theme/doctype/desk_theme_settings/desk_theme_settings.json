@@ -1,0 +1,149 @@
+{
+ "actions": [],
+ "creation": "2026-10-22 00:00:00.000000",
+ "description": "Desk, login and website colours. Reload the page after saving to see changes.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "palette_section",
+  "neutral_palette",
+  "light_section",
+  "accent_color",
+  "column_break_lt01",
+  "sidebar_color",
+  "column_break_lt03",
+  "dock_color",
+  "column_break_lt02",
+  "topbar_color",
+  "dark_section",
+  "accent_color_dark",
+  "column_break_dk01",
+  "sidebar_color_dark",
+  "column_break_dk03",
+  "dock_color_dark",
+  "column_break_dk02",
+  "topbar_color_dark"
+ ],
+ "fields": [
+  {
+   "fieldname": "palette_section",
+   "fieldtype": "Section Break",
+   "label": "Palette"
+  },
+  {
+   "default": "Slate",
+   "description": "Tint for surfaces, text and borders. Neutral keeps Frappe's greys.",
+   "fieldname": "neutral_palette",
+   "fieldtype": "Select",
+   "label": "Neutral Palette",
+   "options": "Slate\nZinc\nNeutral",
+   "reqd": 1
+  },
+  {
+   "description": "Blank colours use the palette's defaults.",
+   "fieldname": "light_section",
+   "fieldtype": "Section Break",
+   "label": "Light Theme"
+  },
+  {
+   "default": "#4F5D95",
+   "description": "Primary buttons, links, checkboxes and focus rings.",
+   "fieldname": "accent_color",
+   "fieldtype": "Color",
+   "label": "Accent"
+  },
+  {
+   "fieldname": "column_break_lt01",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sidebar_color",
+   "fieldtype": "Color",
+   "label": "Sidebar"
+  },
+  {
+   "fieldname": "column_break_lt03",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Icon rail left of the sidebar.",
+   "fieldname": "dock_color",
+   "fieldtype": "Color",
+   "label": "Dock"
+  },
+  {
+   "fieldname": "column_break_lt02",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "topbar_color",
+   "fieldtype": "Color",
+   "label": "Top Bar"
+  },
+  {
+   "description": "Blank colours use the palette's defaults.",
+   "fieldname": "dark_section",
+   "fieldtype": "Section Break",
+   "label": "Dark Theme"
+  },
+  {
+   "default": "#8C9AD6",
+   "description": "Primary buttons, links, checkboxes and focus rings.",
+   "fieldname": "accent_color_dark",
+   "fieldtype": "Color",
+   "label": "Accent"
+  },
+  {
+   "fieldname": "column_break_dk01",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sidebar_color_dark",
+   "fieldtype": "Color",
+   "label": "Sidebar"
+  },
+  {
+   "fieldname": "column_break_dk03",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Icon rail left of the sidebar.",
+   "fieldname": "dock_color_dark",
+   "fieldtype": "Color",
+   "label": "Dock"
+  },
+  {
+   "fieldname": "column_break_dk02",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "topbar_color_dark",
+   "fieldtype": "Color",
+   "label": "Top Bar"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-22 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Desk Theme",
+ "name": "Desk Theme Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

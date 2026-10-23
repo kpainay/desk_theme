@@ -3,7 +3,7 @@ name = "desk_theme"
 authors = [
     { name = "Orith", email = "info@orith.tech"}
 ]
-description = "Theme for Frappe desk, login and website: palette, accent and shell colours from one settings page."
+description = "Desk, login and website theme from one settings page."
 requires-python = ">=3.14"
 readme = "README.md"
 dynamic = ["version"]

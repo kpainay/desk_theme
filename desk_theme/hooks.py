@@ -1,7 +1,7 @@
 app_name = "desk_theme"
 app_title = "Desk Theme"
 app_publisher = "Orith"
-app_description = "Theme for Frappe desk, login and website: palette, accent and shell colours from one settings page."
+app_description = "Desk, login and website theme from one settings page."
 app_email = "info@orith.tech"
 app_license = "mit"
 
@@ -37,12 +37,18 @@ use_json_request_body = True
 # Includes in <head>
 # ------------------
 
+# Theme: static token mapping + colours from Desk Theme Settings.
+_THEME_CSS = [
+	"/assets/desk_theme/css/theme.css",
+	"/api/method/desk_theme.theme.api.stylesheet_css",
+]
+
 # include js, css files in header of desk.html
-# app_include_css = "/assets/desk_theme/css/desk_theme.css"
+app_include_css = _THEME_CSS
 # app_include_js = "/assets/desk_theme/js/desk_theme.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/desk_theme/css/desk_theme.css"
+web_include_css = _THEME_CSS
 # web_include_js = "/assets/desk_theme/js/desk_theme.js"
 
 # include custom scss in every website theme (without file extension ".scss")
@@ -304,4 +310,3 @@ require_type_annotated_api_methods = True
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-

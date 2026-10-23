@@ -1,0 +1,271 @@
+/*
+ * Desk theme — CSS variable overrides for Frappe desk, website and login.
+ *
+ * Loaded after Frappe's bundles (app_include_css / web_include_css), so equal
+ * specificity wins by source order. No Frappe files are modified.
+ *
+ * Two stylesheets, one theme:
+ *
+ *   Desk Theme Settings ──► /api/method/desk_theme.theme.api.stylesheet_css
+ *     (desk form)              --gray-50…950   palette-tinted grey ramp
+ *                              --desk-theme-*       accent, sidebar, top bar
+ *                                   │
+ *   theme.css (this file) ──────────┘ maps Frappe tokens onto var(--desk-theme-*)
+ *
+ * Frappe token layers (Espresso, frappe/public/css/espresso):
+ *
+ *   raw scale   --gray-50…950, --white          ← set by the endpoint
+ *        │
+ *   semantic    --surface-* / --ink-* / --outline-*
+ *        │
+ *   legacy      --primary, --bg-color, --border-color, --control-bg …
+ *        │
+ *   component   .es-button --bt-* · sidebar --desk-sidebar-bg · dock --dock-*
+ *
+ * Every var(--desk-theme-x, fallback) falls back to Frappe's own value when the
+ * setting is blank (the endpoint emits `initial` for blanks).
+ *
+ * Selectors: `html:root` / `html[data-theme="dark"]` (0,1,1) outrank Frappe's
+ * `:root` (0,1,0) regardless of load order. Needed because the login page
+ * loads login.bundle.css after us, and it re-declares every Frappe token.
+ *
+ * Rule: a token set in the light block must be set again in the dark block.
+ * Otherwise the light value beats Frappe's dark value on <html>.
+ *
+ * Sections:
+ *   1. Brand       — edit in Desk Theme Settings, not here
+ *   2. Tokens (both schemes)
+ *   3. Tokens (light)
+ *   4. Tokens (dark)
+ *   5. Typography
+ *   6. Components  — buttons, inputs, cards, tables, modals, navbar, sidebar
+ *   7. Website     — login, web navbar, footer
+ *   8. FRAGILE: selector overrides — re-check after `bench update`
+ */
+
+
+/* ==========================================================================
+   1. Brand
+   Values come from Desk Theme Settings (search "Desk Theme Settings").
+   Contract set by the endpoint, per scheme:
+     --desk-theme-accent     primary buttons, links, checkboxes, focus
+     --desk-theme-accent-fg  text on the accent (white or near-black, computed)
+     --desk-theme-sidebar    desk sidebar (224px panel)
+     --desk-theme-dock       desk dock (56px icon rail, left of the sidebar)
+     --desk-theme-topbar     desk page header and website navbar
+   ========================================================================== */
+
+
+/* ==========================================================================
+   2. Tokens (both schemes)
+   Re-declared under each data-theme scope so nested previews (theme
+   switcher) resolve against their own --desk-theme-* values.
+   ========================================================================== */
+
+html:root,
+[data-theme="light"],
+[data-theme="dark"],
+.dark {
+	/* Accent. Blank → Frappe's near-black (light) / near-white (dark). */
+	--primary: var(--desk-theme-accent, var(--surface-gray-10));
+	--primary-color: var(--primary);
+	--brand-color: var(--primary);
+	--btn-primary: var(--primary);
+	--progress-bar-bg: var(--primary);
+	--date-active-bg: var(--primary);
+	--date-active-text: var(--desk-theme-accent-fg, var(--ink-base));
+
+	/* Hover moves the accent toward the text colour: darker in light, lighter in dark. */
+	--desk-theme-accent-hover: color-mix(in srgb, var(--primary) 85%, var(--ink-gray-9));
+
+	/* Focus ring in the accent, translucent so it never hides the border. */
+	--desk-theme-focus: color-mix(in srgb, var(--primary) 40%, transparent);
+	--focus-default: 0 0 0 2px var(--desk-theme-focus);
+	--focus-outline-default: 2px solid var(--desk-theme-focus);
+
+	/* Mobile desk navbar shares the top bar colour. */
+	--navbar-bg: var(--desk-theme-topbar, var(--surface-sidebar));
+
+	/* Shape: slightly rounded. Controls 6px, cards 8px, overlays 10px
+	   (Frappe: 8 / 10 / 12). */
+	--radius: 6px;
+	--radius-md: 8px;
+	--radius-lg: 10px;
+
+	/* Cards: a hairline border instead of a blurred shadow. A ring, not a
+	   border, so card sizes and layout don't change. */
+	--card-shadow: 0 0 0 1px var(--border-color);
+
+	/* Placeholders read as hints at AA, not as near-invisible text
+	   (Frappe's --ink-gray-3 is ~1.7:1). */
+	--placeholder-color: var(--text-light);
+}
+
+
+/* ==========================================================================
+   3. Tokens (light)
+   ========================================================================== */
+
+html:root,
+[data-theme="light"] {
+	/* Frappe light default: --surface-sidebar (sidebar.scss). */
+	--desk-sidebar-bg: var(--desk-theme-sidebar, var(--surface-sidebar));
+
+	/* Dock is its own component; Frappe paints it with the sidebar colour
+	   (dock.scss: --dock-bg: var(--desk-sidebar-bg)). Default it one layer
+	   deeper than the sidebar so rail and panel read apart. Active tile
+	   (white + shadow) and hover (--surface-gray-2) still show on it. */
+	--dock-bg: var(--desk-theme-dock, var(--surface-gray-3));
+
+	/* Light-weight text. Frappe's --ink-gray-5 is ~4.1:1 on inputs; a 60/40
+	   mix with --ink-gray-6 clears 4.5:1 on page, inputs and sidebar for
+	   every palette. */
+	--text-light: color-mix(in srgb, var(--ink-gray-5) 60%, var(--ink-gray-6));
+}
+
+
+/* ==========================================================================
+   4. Tokens (dark)
+   ========================================================================== */
+
+html[data-theme="dark"],
+[data-theme="dark"],
+.dark {
+	/* Frappe dark default: --surface-gray-1 (sidebar.scss; --surface-sidebar is transparent in dark). */
+	--desk-sidebar-bg: var(--desk-theme-sidebar, var(--surface-gray-1));
+
+	/* Dock one layer deeper than the sidebar. The ramp has nothing darker
+	   than the page, so deepen the page surface toward black. */
+	--dock-bg: var(--desk-theme-dock, color-mix(in srgb, var(--surface-base) 70%, black));
+
+	/* Light-weight text. Dark inputs (--control-bg) are light enough that only
+	   --ink-gray-6 clears 4.5:1, so it matches --text-muted in dark. */
+	--text-light: var(--ink-gray-6);
+
+	/* Checked checkboxes in the accent. dark.scss repaints them with
+	   --surface-gray-10 (near-white). Its check mark is black, which reads on
+	   any dark accent: validation keeps those light (4.5:1 on the dark page). */
+	--checkbox-gradient: linear-gradient(180deg, var(--primary) -124.51%, var(--primary) 100%);
+
+	/* Borders replace shadows, so they must show: --outline-gray-1 is ~1.1:1
+	   on the dark page. */
+	--border-color: var(--outline-gray-2);
+	--table-border-color: var(--outline-gray-2);
+}
+
+
+/* ==========================================================================
+   5. Typography
+   Inter, Frappe's default (--font-stack). Unchanged.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   6. Components
+   ========================================================================== */
+
+/* --- Buttons --- */
+
+/* --- Inputs --- */
+
+/* --- Cards --- */
+
+/* --- Tables --- */
+
+/* --- Modals --- */
+
+/* --- Navbar --- */
+
+/* --- Sidebar --- */
+
+
+/* ==========================================================================
+   7. Website (login, web navbar, footer)
+   Website pages never set data-theme, so they always render light.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   8. FRAGILE: selector overrides
+   Targets Frappe markup or compiled literals that no variable reaches.
+   Each rule names its target and why. Re-check after `bench update`.
+   ========================================================================== */
+
+/* Desk top bar. page.scss paints .page-head with --bg-color directly. */
+.page-head {
+	background: var(--desk-theme-topbar, var(--bg-color));
+}
+
+/* Website navbar. navbar.scss compiles $navbar-bg (white) into .navbar-light. */
+.navbar-light {
+	background: var(--desk-theme-topbar, var(--bg-color));
+}
+
+/* Espresso solid buttons. --bt-solid-* live on .es-button (button.css), not
+   :root. [data-theme="red"] buttons keep red: their selector is more specific. */
+.es-button {
+	--bt-solid-bg: var(--primary);
+	--bt-solid-bg-hover: var(--desk-theme-accent-hover);
+	--bt-solid-bg-active: var(--desk-theme-accent-hover);
+	--bt-solid-fg: var(--desk-theme-accent-fg, var(--ink-base));
+}
+
+/* Bootstrap .btn-primary text. buttons.scss uses --neutral, which other
+   components need unchanged, so set the colour here instead. */
+.btn.btn-primary {
+	color: var(--desk-theme-accent-fg, var(--neutral));
+}
+
+/* Input placeholders. desk.bundle uses var(--gray-500) and website.bundle a
+   literal #7c7c7c, not --placeholder-color: below AA, near-invisible in dark. */
+.form-control::placeholder {
+	color: var(--placeholder-color);
+}
+
+/* Input focus. Bootstrap compiles a fixed grey ring into .form-control:focus. */
+.form-control:focus {
+	border-color: var(--primary);
+	box-shadow: var(--focus-default);
+}
+
+/* Child-table cell focus. grid.scss compiles a fixed grey inset ring into
+   this selector. The red error ring (.has-error, more specific) still wins. */
+.grid-body .editable-row .form-control:focus {
+	box-shadow: inset 0 0 0 2px var(--desk-theme-focus);
+}
+
+/* Phone shell. mobile_nav.js moves the dock's job to the tab bar
+   (frappe-ui <frappe-mobile-nav>) and the navigation sheet's top row, and the
+   sidebar's to the navigation sheet. Paint them like their desktop parts;
+   stylesheet.py REGION_SELECTORS gives them matching text colours. */
+frappe-mobile-nav.desk-mobile-nav [data-slot="mobile-nav"],
+.desk-mobile-sheet-dock {
+	background: var(--dock-bg);
+}
+
+/* The sheet's dock row becomes a band: padding all round instead of only a
+   bottom rule (mobile_nav.scss). */
+.desk-mobile-sheet-dock {
+	padding: calc(var(--spacing) * 2);
+	border-bottom: 0;
+	border-radius: var(--radius-lg);
+}
+
+.es-bottom-sheet:has(.desk-mobile-sheet) {
+	background: var(--desk-sidebar-bg);
+}
+
+/* Idle tab labels use --ink-gray-5 (frappe-mobile-nav.js): ~3.8:1 on the
+   dock band. Use the AA-tuned --text-light. A custom dock colour's region
+   rule is more specific and still wins. */
+frappe-mobile-nav.desk-mobile-nav [data-slot="mobile-nav"] {
+	--ink-gray-5: var(--text-light);
+}
+
+/* Floating dock (not pinned). dock.scss hard-codes an 18px radius and the
+   heaviest elevation (--shadow-2xl). Match overlays: 10px, hairline, softer
+   shadow. Hairline is a ring: a border would clip the tiles in the tray. */
+body:not(.dock-pinned) .dock {
+	border-radius: var(--radius-lg);
+	box-shadow: 0 0 0 1px var(--border-color), var(--shadow-lg);
+}
