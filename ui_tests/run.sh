@@ -30,6 +30,8 @@ for plan in $DESK_PLANS; do
 done
 ORIGIN=$ORIGIN node "$HERE/runner.mjs" "$OUT/plan_web.json" "$OUT" > "$OUT/result_web.json"
 
-python3 "$HERE/summarize.py" "$OUT"
+# Sheets before the summary: it exits 1 on failures, which set -e would
+# turn into "no sheets" exactly when they are needed. Its status is ours.
 "$BENCH/env/bin/python" -I "$HERE/sheet.py" "$OUT" "$OUT/sheet" > /dev/null
 echo "Screenshots and contact sheets: $OUT"
+python3 "$HERE/summarize.py" "$OUT"

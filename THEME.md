@@ -93,6 +93,10 @@ After an update:
 
 ```bash
 bench --site <site> run-tests --module desk_theme.theme.test_theme
+bench --site <site> run-tests --module desk_theme.theme.test_theme --test-category unit
+
+# run.sh itself (stubs bench and node; no site needed)
+apps/desk_theme/ui_tests/test_run.sh <bench-dir>
 
 # Screenshot UI tests (headless Chrome over CDP). Site must be served, redis up.
 apps/desk_theme/ui_tests/run.sh <bench-dir> <site> <origin> <workspace-route> <doctype> [out-dir]
