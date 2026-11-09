@@ -45,7 +45,8 @@ _THEME_CSS = [
 
 # include js, css files in header of desk.html
 app_include_css = _THEME_CSS
-# app_include_js = "/assets/desk_theme/js/desk_theme.js"
+# Phone browser bar takes the dock colour instead of Frappe's blue
+app_include_js = "/assets/desk_theme/js/theme_color.js"
 
 # include js, css files in header of web template
 web_include_css = _THEME_CSS

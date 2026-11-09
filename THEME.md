@@ -12,7 +12,7 @@ Desk search bar › **Desk Theme Settings** (on orith: Orith workspace › Setti
 | Neutral Palette | Every surface, text and border grey (Slate, Zinc or Frappe's Neutral) |
 | Accent | Primary buttons, links, checkboxes, focus rings |
 | Sidebar | Desk sidebar (224px panel); on phones, the navigation sheet |
-| Dock | Desk dock (icon rail left of the sidebar); on phones, the tab bar and the sheet's app row |
+| Dock | Desk dock (icon rail left of the sidebar); on phones, the tab bar, the sheet's app row and the browser bar |
 | Top Bar | Desk page header, website navbar |
 
 Light and dark are set separately. Blank means "use the default".
@@ -48,6 +48,7 @@ Both stylesheets load after Frappe's through `app_include_css` and
 | `desk_theme/theme/stylesheet.py` | Builds the dynamic CSS and validates settings. |
 | `desk_theme/theme/api.py` | Serves the dynamic CSS. |
 | `desk_theme/public/css/theme.css` | Static token mapping and selector overrides. Sections are numbered; see its header. |
+| `desk_theme/public/js/theme_color.js` | Repaints the phone browser bar (`meta theme-color`) with the dock colour. |
 | `desk_theme/theme/test_theme.py` | Unit and integration tests. |
 
 Rules that keep it working:
@@ -88,6 +89,9 @@ These depend on Frappe internals that variables don't cover.
    `--dock-bg`, `--checkbox-gradient`, `--card-shadow`, `--primary`,
    `--placeholder-color` and the legacy aliases. A rename in Frappe makes the
    override silently stop working. Grep `apps/frappe/frappe/public` for each.
+5. **`desk.html` `meta theme-color`**: Frappe hard-codes `#0089FF`;
+   `theme_color.js` overwrites it after load. If Frappe renames or drops the
+   meta, the script adds its own.
 
 After an update:
 
